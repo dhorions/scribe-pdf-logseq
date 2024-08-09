@@ -57,6 +57,10 @@ if ($notebooksFolder -eq $null) {
     Write-Output "'.notebooks' folder not found inside 'Internal Storage'."
     exit
 }
+else
+{
+	 #Write-Output "Processing ${notebooksFolder.GetFolder}"
+}
 
 # Create the destination directory if it doesn't exist
 if (!(Test-Path -Path $destinationPath)) {
@@ -93,9 +97,13 @@ function Get-FileHashSHA256($filePath) {
 
 # Loop through each folder in .notebooks, copy only those with a GUID-like name, and copy the nbk files
 foreach ($folder in $notebooksFolder.GetFolder.Items() | Where-Object { $_.IsFolder }) {
+	
     if ($folder.Name -match $guidPattern) {
+		
         $nbkFile = $folder.GetFolder.Items() | Where-Object { $_.Name -eq $nbkFileName -and -not $_.IsFolder }
+		
         if ($nbkFile -ne $null) {
+			
             # Generate label if not already in JSON file
             if (-not $jsonHashtable.ContainsKey($folder.Name)) {
                 $timestamp = Get-Date -Format "yyyy/MM/dd HH:mm:ss"
@@ -107,6 +115,7 @@ foreach ($folder in $notebooksFolder.GetFolder.Items() | Where-Object { $_.IsFol
             # Create a folder in the destination path named after the GUID
             $guidFolderPath = Join-Path -Path $destinationPath -ChildPath $folder.Name
             if (!(Test-Path -Path $guidFolderPath)) {
+				Write-Output "Creating $guidFolderPath"
                 New-Item -ItemType Directory -Path $guidFolderPath
             }
 
@@ -139,7 +148,7 @@ foreach ($folder in $notebooksFolder.GetFolder.Items() | Where-Object { $_.IsFol
 
                 # Run calibre-debug.exe to convert the contents to an EPUB file
                 $arguments = "-r `"$pluginName`" -- `"$guidFolderPath`" `"$outputEpubPath`""
-                #Write-Output "Executing: $calibrePath $arguments"
+                Write-Output "Executing: $calibrePath $arguments"
                 Start-Process -FilePath $calibrePath -ArgumentList $arguments -NoNewWindow -Wait
                 # Define the output EPUB path using the GUID name
                 $outputEpubPath = Join-Path -Path $outputEpubDirectory -ChildPath ($folder.Name + ".epub")
@@ -151,7 +160,7 @@ foreach ($folder in $notebooksFolder.GetFolder.Items() | Where-Object { $_.IsFol
                 $outputPdfPath = Join-Path -Path $outputPdfDirectory -ChildPath ($safeLabel + ".pdf")
                 # Run ebook-convert.exe to convert the EPUB file to a PDF file
                 $convertArguments = "`"$outputEpubPath`" `"$outputPdfPath`""
-                #Write-Output "Executing: $ebookConvertPath $convertArguments"
+                Write-Output "Executing: $ebookConvertPath $convertArguments"
                 Start-Process -FilePath $ebookConvertPath -ArgumentList $convertArguments -NoNewWindow -Wait
             }
 

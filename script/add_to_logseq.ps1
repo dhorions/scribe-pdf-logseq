@@ -27,7 +27,7 @@ $NewReferences = @()
 foreach ($PDF in $PDFs) {
     # Define the destination path for the PDF
     $DestinationPath = Join-Path -Path $DestinationFolder -ChildPath $PDF.Name
-
+	Write-Host $PDF.Name
     # Move the PDF to the destination folder (overwrite if exists)
     Copy-Item -Path $PDF.FullName -Destination $DestinationPath -Force
 	git -C $repoPath add $DestinationPath
