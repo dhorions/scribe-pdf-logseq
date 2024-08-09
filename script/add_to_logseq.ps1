@@ -1,7 +1,14 @@
-﻿# Define paths and variables at the top of the script
-$SourceFolder = "C:\scribe\pdf\"    # Folder containing the PDFs
-$DestinationFolder = "C:\LogSeq\assets\pdf"  # Folder where PDFs will be moved
-$MarkdownFile = "C:\LogSeq\pages\Scribe Notebooks.md"   # Path to the markdown file
+﻿# Import configuration variables
+. "..\settings\config.ps1"
+
+
+# Define paths and variables at the top of the script
+#$SourceFolder = "C:\scribe\pdf\"    # Folder containing the PDFs
+#$DestinationFolder = "D:\LogSeq\LogSeqPl\assets\pdf"  # Folder where PDFs will be moved
+#$MarkdownFile = "D:\LogSeq\LogSeqPl\pages\Scribe Notebooks.md"   # Path to the markdown file
+#$repoPath = "D:\LogSeq\LogSeqPl\"
+
+git -C $repoPath pull
 
 # Ensure destination folder exists
 if (-Not (Test-Path $DestinationFolder)) {
@@ -23,10 +30,11 @@ foreach ($PDF in $PDFs) {
 
     # Move the PDF to the destination folder (overwrite if exists)
     Copy-Item -Path $PDF.FullName -Destination $DestinationPath -Force
+	git -C $repoPath add $DestinationPath
 
     # Define the relative link format
     $RelativeLink = "../assets/pdf/$($PDF.Name)"
-    $LinkText = "![$($PDF.BaseName)]($RelativeLink)"
+    $LinkText = "- ![$($PDF.BaseName)]($RelativeLink)"
 
     # Check if the link already exists in the markdown content
     $LinkExists = $MarkdownContent -contains $LinkText
@@ -48,5 +56,9 @@ if ($NewReferences.Count -gt 0) {
     # Write the updated content back to the markdown file
     Set-Content -Path $MarkdownFile -Value $UpdatedContent
 }
-
-Write-Output "PDF files have been moved and markdown file updated."
+if ($gitLogSeq -eq "Yes") {
+	git -C $repoPath add $MarkdownFile
+	git -C $repoPath commit -m "Kindle Scribe Notebook Update"
+	git -C $repoPath push -u origin master
+}
+Write-Output "PDF files have been moved to LogSeq assets and markdown file updated. ($MarkdownFile)"

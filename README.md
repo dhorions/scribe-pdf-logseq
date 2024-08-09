@@ -15,47 +15,26 @@ Ensure the following are installed:
 
 1. **Calibre**: An e-book manager. [Info Here](https://calibre-ebook.com/)
 2. **KFX Input Plugin**: Required for handling Kindle formats. [Info Here](https://www.mobileread.com/forums/showthread.php?t=291290).
-3. **LogSeq**: The main intent is to add the Notebooks converted to pdf to logseq.  It can also be used without logseq, simply delete the call to  add_to_logseq.ps1 from scribe_watcher.ps1. [Info here](https://logseq.com/)
+3. **LogSeq**: The main intent is to add the Notebooks converted to pdf to logseq.  It can also be used without logseq to just generate the pdfs from your notebooks. [Info here](https://logseq.com/)
 
 ## Scripts and Variables
+
+### `setup.ps1`
+
+Run this script first, it will create a settings/config.ps1 file containing your configuration.
+
 
 ### `scribe_watcher.ps1`
 
 This script monitors for the Kindle Scribe device connection and triggers the export and conversion process.
 
-#### Variables
-
-- `$deviceNamePattern = "*Kindle*"`: Pattern used to identify the Kindle device when it is connected.
-- `$scriptPath = "c:\scribe\script\"`: The path to the directory containing the other scripts (`export_from_scribe.ps1` and `add_to_logseq.ps1`).
-
 ### `export_from_scribe.ps1`
 
 Handles the extraction of notebooks from the connected Kindle Scribe.
 
-#### Variables
-
-- `$deviceNamePattern = "*Kindle*"`: Pattern to identify the Kindle Scribe device.
-- `$internalStorageFolderName = "Internal Storage"`: The name of the internal storage folder in the Kindle Scribe.
-- `$notebooksFolderName = ".notebooks"`: The folder name where the notebooks are stored on the device.
-- `$nbkFileName = "nbk"`: The file name pattern for the notebook files to be copied.
-- `$destinationPath = "C:\scribe\exported_notebooks\"`: Destination path where the copied notebook files will be stored.
-- `$guidPattern = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'`: Regex pattern to match GUIDs, which are used as unique identifiers for notebooks.
-- `$calibrePath = "C:\Program Files\Calibre2\calibre-debug.exe"`: Path to the Calibre `calibre-debug` executable, used for debugging or extraction purposes.
-- `$outputEpubDirectory = "C:\scribe\epub\"`: Directory where the intermediate EPUB files are stored during conversion.
-- `$pluginName = "KFX Input"`: Name of the Calibre plugin used to handle Kindle formats.
-- `$ebookConvertPath = "C:\Program Files\Calibre2\ebook-convert.exe"`: Path to the Calibre `ebook-convert` executable used for converting files to PDF.
-- `$outputPdfDirectory = "C:\scribe\pdf\"`: Directory where the final PDF files are saved.
-- `$settingsDirectory = "C:\scribe\settings"`: Directory where settings and JSON files related to the process are stored.
-
 ### `add_to_logseq.ps1`
 
 Manages the process of adding the converted PDFs into Logseq.
-
-#### Variables
-
-- `$SourceFolder = "C:\scribe\pdf\"`: The directory where the generated PDFs are initially stored after conversion.
-- `$DestinationFolder = "C:\Logseq\assets\pdf"`: The assets directory within Logseq where the PDFs will be moved. This path should correspond to your Logseq setup.
-- `$MarkdownFile = "C:\LogSeq\pages\Scribe Notebooks.md"`: Path to the Markdown file in Logseq where links to the PDFs are documented.  Each new detected notebook will be added at the top and can be opened with the integrated pdf reader.
 
 ## Customizing the PDF Label
 
@@ -88,8 +67,9 @@ By updating the `notebook_labels.json` file, you control the naming of the outpu
 ## Usage
 
 1. Ensure all prerequisites are installed and paths are correctly set in the scripts.
-2. Connect your Kindle Scribe to the computer.
+2. Run `setup.ps1` script 
 3. Run the `scribe_watcher.ps1` script. The script will detect the device, export notebooks, convert them to PDF, and integrate them into Logseq.
+4. Connect your Kindle Scribe to the computer.
 
 ## Troubleshooting
 

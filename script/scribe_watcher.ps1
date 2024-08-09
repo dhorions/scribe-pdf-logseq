@@ -1,10 +1,15 @@
-﻿# Define the device name pattern to identify the Kindle
-$deviceNamePattern = "*Kindle*"
-$scriptPath = "c:\scribe\script\"
+﻿
+# Import configuration variables
+. "..\settings\config.ps1"
+# Define the device name pattern to identify the Kindle
+#$deviceNamePattern = "*Kindle*"
+#$scriptPath = "c:\scribe\script\"
 
 # Initialize Shell.Application COM object
 $shell = New-Object -ComObject Shell.Application
 $connected = $false;
+Write-Host "Watching for Kindle Scribe..." -ForegroundColor Yellow
+Write-Host "Connect your device with a USB cable to sync your notebooks." -ForegroundColor Blue
 while($true)
 {
     # Find the Kindle Scribe device
@@ -15,7 +20,7 @@ while($true)
         if($connected)
         {
              $connected = $false;
-             Write-Output "Kindle Scribe disconnection detected"
+             Write-Host "Kindle Scribe disconnection detected" -ForegroundColor Red
         }
        
         
@@ -24,12 +29,14 @@ while($true)
     {
         if( $connected -eq $false)
         {
-            Write-Output "Kindle Scribe connection detected"
+            Write-Host "Kindle Scribe connection detected" -ForegroundColor Green	
             #Scribe plugged in, start sync process
             $scriptToRun = "${scriptPath}export_from_scribe.ps1"
             & $scriptToRun
-            $scriptToRun = "${scriptPath}add_to_logseq.ps1"
-            & $scriptToRun
+			if ($updateLogSeq -eq "Yes") {
+				$scriptToRun = "${scriptPath}add_to_logseq.ps1"
+				& $scriptToRun
+			}
             $connected = $true;
         }
 

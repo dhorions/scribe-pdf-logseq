@@ -1,18 +1,21 @@
+# Import configuration variables
+. "..\settings\config.ps1"
+
 # Configuration variables
-$deviceNamePattern = "*Kindle*"      # Pattern to identify the Kindle Scribe device
-$internalStorageFolderName = "Internal Storage"  # Name of the internal storage folder
-$notebooksFolderName = ".notebooks"  # Name of the notebooks folder
-$nbkFileName = "nbk"                 # Name of the file to be copied
-$destinationPath = "C:\scribe\exported_notebooks\" # Destination path for copied files
-$guidPattern = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$' # Pattern to match GUIDs
-$calibrePath = "C:\Program Files\Calibre2\calibre-debug.exe" # Path to the calibre-debug executable
-$outputEpubDirectory = "C:\scribe\epub\" # Output directory for EPUB files
-$pluginName = "KFX Input" # Name of the Calibre plugin to use
-$ebookConvertPath = "C:\Program Files\Calibre2\ebook-convert.exe" # Path to the ebook-convert executable
+#$deviceNamePattern = "*Kindle*"      # Pattern to identify the Kindle Scribe device
+#$internalStorageFolderName = "Internal Storage"  # Name of the internal storage folder
+#$notebooksFolderName = ".notebooks"  # Name of the notebooks folder
+#$nbkFileName = "nbk"                 # Name of the file to be copied
+#$destinationPath = "C:\scribe\exported_notebooks\" # Destination path for copied files
+#$guidPattern = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$' # Pattern to match GUIDs
+#$calibrePath = "C:\Program Files\Calibre2\calibre-debug.exe" # Path to the calibre-debug executable
+#$outputEpubDirectory = "C:\scribe\epub\" # Output directory for EPUB files
+#$pluginName = "KFX Input" # Name of the Calibre plugin to use
+#$ebookConvertPath = "C:\Program Files\Calibre2\ebook-convert.exe" # Path to the ebook-convert executable
 # Directory for storing the output PDF files
-$outputPdfDirectory = "C:\scribe\pdf\" # Output directory for PDF files
+#$outputPdfDirectory = "C:\scribe\pdf\" # Output directory for PDF files
 # Configuration for settings and JSON file
-$settingsDirectory = "C:\scribe\settings"
+#$settingsDirectory = "C:\scribe\settings"
 $jsonFilePath = Join-Path -Path $settingsDirectory -ChildPath "notebook_labels.json"
 
 # Ensure the settings directory exists
@@ -126,7 +129,7 @@ foreach ($folder in $notebooksFolder.GetFolder.Items() | Where-Object { $_.IsFol
             #Write-Output "Copied $($folder.Name)\$nbkFileName to $guidFolderPath - $currentHash"
             if($currentHash -eq $previousHash)
             {
-                #Write-Output "Notebook unchanged - $destinationFilePath"
+                Write-Output "Notebook unchanged - $destinationFilePath"
             }
             else
             {
