@@ -9,6 +9,14 @@ The script can be left running, when you want to sync the notebooks from your ki
 
 The main script, `scribe_watcher.ps1`, monitors for the connection of a Kindle Scribe device, exports the notebooks, converts them to PDF, and integrates them into Logseq.
 
+## Video
+
+
+
+
+https://github.com/user-attachments/assets/55797896-2540-46be-9f95-76dddee1c81a
+
+
 ## Prerequisites
 
 Ensure the following are installed:
